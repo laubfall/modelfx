@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import de.ludwig.jfxmodel.sample.components.BottomBox?>
+
+<fx:root type="javafx.scene.layout.VBox" fx:id="projectSummary" minWidth="-Infinity" prefWidth="317.0" spacing="1.0" xmlns:fx="http://javafx.com/fxml">
+  <children>
+    <Text fx:id="midText" layoutX="81.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text in der Mitte" />
+    <BottomBox fx:id="bottom"/>
+  </children>
+</fx:root>

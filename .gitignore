@@ -1,0 +1,7 @@
+target/
+bin/
+build.fxbuild
+.classpath
+.project
+.settings/
+*.fxml.bak

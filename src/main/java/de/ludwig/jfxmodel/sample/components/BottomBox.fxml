@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root type="javafx.scene.layout.AnchorPane" fx:id="projectSummary" minWidth="-Infinity" prefWidth="317.0" xmlns:fx="http://javafx.com/fxml">
+  <children>
+    <Pane layoutX="13.0" layoutY="5.0" prefHeight="154.0" prefWidth="158.0" style="-fx-background-color:red;">
+      <children>
+        <Text fx:id="message" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+        <ListView fx:id="bottomMessages" layoutX="25.0" layoutY="30.0" prefHeight="118.0" prefWidth="131.5" />
+      </children>
+    </Pane>
+  </children>
+</fx:root>
