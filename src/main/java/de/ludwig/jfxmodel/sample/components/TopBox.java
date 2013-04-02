@@ -30,7 +30,7 @@ public class TopBox implements Initializable {
 	
 	private final AnchorPane content;
 	
-	private Model<TopBean> model = new Model<>(this);
+	private Model<TopBean> model = new Model<>(this, new TopBean());
 	
 	public TopBox(){
 		FXMLLoader loader = new FXMLLoader(TopBox.class.getResource("/de/ludwig/jfxmodel/sample/components/TopBox.fxml"));
@@ -44,7 +44,7 @@ public class TopBox implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		final TopBean topBean = new TopBean();
+		final TopBean topBean = model.getModelObject();
 		topBean.setMessageOfTheDay("thats the message of the day");
 		MidBean midBean = new MidBean();
 		midBean.setMidText("hello world says tob box to mid box");
@@ -54,7 +54,6 @@ public class TopBox implements Initializable {
 		bottomBean.getBottomMessages().add("top2");
 		midBean.setBottom(bottomBean);
 		topBean.setMidBox(midBean);
-		model.setModelObject(topBean);
 		model.bind();
 	}
 

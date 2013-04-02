@@ -13,6 +13,12 @@ import javafx.util.Pair;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+/**
+ * 
+ * @author Daniel
+ *
+ * @param <MODELBEAN> type of the backing-bean
+ */
 public class Model<MODELBEAN> {
 	private MODELBEAN modelObject;
 	
@@ -25,7 +31,15 @@ public class Model<MODELBEAN> {
 	 */
 	public Model(Object owner) {
 		super();
+		if(owner == null) {
+			throw new RuntimeException("please provide the owner of this Model-Instance!");
+		}
 		this.owner = owner;
+	}
+	
+	public Model(Object owner, MODELBEAN backingBean) {
+		this(owner);
+		this.modelObject = backingBean;
 	}
 
 	public MODELBEAN getModelObject() {
@@ -39,11 +53,14 @@ public class Model<MODELBEAN> {
 	
 	public void setModelObject(MODELBEAN bean) {
 		modelObject = (MODELBEAN) bean;
-		
 	}
 	
 	@SuppressWarnings("unchecked")
 	public final void bind(){
+		if(modelObject == null) {
+			throw new RuntimeException("you have to set a backing-bean to the model in order to call bind()");
+		}
+		
 		final Field[] declaredFields = owner.getClass().getDeclaredFields();
 		for(Field f : declaredFields){
 			final BindToBeanProperty btb = f.getAnnotation(BindToBeanProperty.class);
@@ -78,6 +95,10 @@ public class Model<MODELBEAN> {
 	
 	@SuppressWarnings("unchecked")
 	private void bind(Property<Object> p1, Property<Object> p2){
+		if(p1 == null || p2 == null) {
+			throw new RuntimeException("one or both properties to bind is / are null. normally that means that you do not have initialized the Property");
+		}
+		
 		if(p1 instanceof ObservableList && p2 instanceof ObservableList){
 			Bindings.bindContentBidirectional((ObservableList<Object>)p1, (ObservableList<Object>)p2);
 		} else {
@@ -97,7 +118,7 @@ public class Model<MODELBEAN> {
 			final Property<?> prop = (Property<?>) propertyGetter.invoke(fromThis);
 			return prop;
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException(String.format("did not found a JavaFX-Property %s in object of type %s", propertyName, fromThis.getClass().getName()));
 		}
 	}
 	
