@@ -19,14 +19,14 @@ import de.ludwig.jfxmodel.sample.beans.TopBean;
 public class TopBox implements Initializable {
 	@BindToBeanProperty(bindPropertyName = "text")
 	@FXML
-	public Text messageOfTheDay;
+	private Text messageOfTheDay;
 
 	@FXML
 	private ListView<String> messages;
 	
 	@BindToBeanProperty
 	@FXML
-	public MidBox midBox;
+	private MidBox midBox;
 	
 	private final AnchorPane content;
 	
@@ -45,11 +45,12 @@ public class TopBox implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final TopBean topBean = model.getModelObject();
-		topBean.setMessageOfTheDay("thats the message of the day");
+		topBean.setMessageOfTheDay("TopBox: thats the message of the day");
 		MidBean midBean = new MidBean();
-		midBean.setMidText("hello world says tob box to mid box");
+		midBean.setMidText("MidBox: hello world to mid box");
+		midBean.setaNumber(1977);
 		BottomBean bottomBean = new BottomBean();
-		bottomBean.setMessage("bottom message from top");
+		bottomBean.setMessage("BottomBox: bottom message");
 		bottomBean.getBottomMessages().add("top1");
 		bottomBean.getBottomMessages().add("top2");
 		midBean.setBottom(bottomBean);

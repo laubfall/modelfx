@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.ludwig.jfxmodel.sample.components.*?>
+<?import de.ludwig.jfxmodel.sample.components.BottomBox?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
-<?import de.ludwig.jfxmodel.sample.components.BottomBox?>
+<?scenebuilder-classpath-element ../../../../../../../../target/classes?>
 
-<fx:root type="javafx.scene.layout.VBox" fx:id="projectSummary" minWidth="-Infinity" prefWidth="317.0" spacing="1.0" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="javafx.scene.layout.VBox" fx:id="projectSummary" minWidth="-Infinity" prefHeight="204.0" prefWidth="188.0" spacing="1.0" xmlns:fx="http://javafx.com/fxml">
   <children>
-    <Text fx:id="midText" layoutX="81.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text in der Mitte" />
-    <BottomBox fx:id="bottom"/>
+    <Text fx:id="midText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text in der Mitte" />
+    <BottomBox fx:id="bottom" VBox.vgrow="ALWAYS" />
+    <HBox prefWidth="200.0">
+      <children>
+        <Text fx:id="aNumber" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      </children>
+    </HBox>
   </children>
 </fx:root>

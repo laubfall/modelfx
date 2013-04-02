@@ -1,5 +1,6 @@
 package de.ludwig.jfxmodel.sample.beans;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class MidBean {
@@ -7,6 +8,8 @@ public class MidBean {
 
 	private SimpleStringProperty midText = new SimpleStringProperty();
 
+	private SimpleIntegerProperty aNumber = new SimpleIntegerProperty(4711);
+	
 	/**
 	 * @return the midText
 	 */
@@ -37,5 +40,23 @@ public class MidBean {
 	 */
 	public void setBottom(BottomBean bottom) {
 		this.bottom = bottom;
+	}
+
+	/**
+	 * @return the aNumber
+	 */
+	public Integer getaNumber() {
+		return aNumber.get();
+	}
+
+	/**
+	 * @param aNumber the aNumber to set
+	 */
+	public void setaNumber(Integer aNumber) {
+		this.aNumber.set(aNumber);
+	}
+	
+	public SimpleIntegerProperty aNumberProperty() {
+		return aNumber;
 	}
 }

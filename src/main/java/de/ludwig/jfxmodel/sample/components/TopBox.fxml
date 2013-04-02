@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.ludwig.jfxmodel.sample.components.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
-<?import de.ludwig.jfxmodel.sample.components.MidBox?>
+<?scenebuilder-classpath-element ../../../../../../../../target/classes?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml">
   <children>
-    <Text fx:id="messageOfTheDay" layoutX="37.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Message of the day" />
-    <MidBox fx:id="midBox" />
+    <VBox prefHeight="400.0" prefWidth="600.0">
+      <children>
+        <Text fx:id="messageOfTheDay" strokeType="OUTSIDE" strokeWidth="0.0" text="Message of the day" />
+        <MidBox fx:id="midBox" />
+      </children>
+    </VBox>
   </children>
 </AnchorPane>

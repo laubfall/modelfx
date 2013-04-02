@@ -10,6 +10,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
+import javafx.util.StringConverter;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -55,7 +56,6 @@ public class Model<MODELBEAN> {
 		modelObject = (MODELBEAN) bean;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public final void bind(){
 		if(modelObject == null) {
 			throw new RuntimeException("you have to set a backing-bean to the model in order to call bind()");
@@ -66,6 +66,9 @@ public class Model<MODELBEAN> {
 			final BindToBeanProperty btb = f.getAnnotation(BindToBeanProperty.class);
 			if(btb==null)
 				continue;
+			
+			// GIT-2
+			f.setAccessible(true);
 			
 			// at this point we know we have properties that requires model support
 			boolean supportsCombined = supportsCombined(f.getType());
@@ -82,16 +85,44 @@ public class Model<MODELBEAN> {
 					throw new RuntimeException(e);
 				}
 			} else {
-				// simple binding
-				final String bindPropertyName = btb.bindPropertyName();
-				final Object objectFromField = objectFromField(f, owner);
-				final Property<Object> jfxComponentProp = (Property<Object>) jfxProperty(bindPropertyName, objectFromField);
-				final Property<Object> modelObjectProp = (Property<Object>) jfxProperty(f.getName(), modelObject);
-				bind(jfxComponentProp, modelObjectProp);
-				bindedProperties.add(new Pair<Property<?>, Property<?>>(jfxComponentProp, modelObjectProp));
+				bind(btb, f);
 			}
 		}
 	}
+	
+	public final void unbind() {
+		for(Pair<Property<?>, Property<?>> p : bindedProperties){
+			Bindings.unbindBidirectional(p.getKey(), p.getValue());
+		}
+	}
+
+	/**
+	 * Decides to bind with a converter or not.
+	 * @param beanBinding
+	 * @param jfxComponentField
+	 */
+	private void bind(final BindToBeanProperty beanBinding, final Field jfxComponentField){
+		final Class<? extends StringConverter<?>> converter = beanBinding.converter();
+		final boolean dummyConverter = converter.isAssignableFrom(DummyConverter.class);
+		final String bindPropertyName = beanBinding.bindPropertyName();
+		final Object objectFromField = objectFromField(jfxComponentField, owner);
+		if(objectFromField == null) {
+			throw new RuntimeException("property to bind is null, forgot to initiate field " + jfxComponentField.getName() + "?");
+		}
+		
+		if(dummyConverter) {
+			final Property<Object> jfxComponentProp = jfxProperty(bindPropertyName, objectFromField);
+			final Property<Object> modelObjectProp = jfxProperty(jfxComponentField.getName(), modelObject);
+			bind(jfxComponentProp, modelObjectProp);
+			bindedProperties.add(new Pair<Property<?>, Property<?>>(jfxComponentProp, modelObjectProp));
+		} else {
+			final Property<String> jfxComponentProp = jfxProperty(bindPropertyName, objectFromField);
+			final Property<Object> modelObjectProp = jfxProperty(jfxComponentField.getName(), modelObject);
+			bind(jfxComponentProp, modelObjectProp, converter(beanBinding));
+			bindedProperties.add(new Pair<Property<?>, Property<?>>(jfxComponentProp, modelObjectProp));
+		}
+	}
+
 	
 	@SuppressWarnings("unchecked")
 	private void bind(Property<Object> p1, Property<Object> p2){
@@ -106,22 +137,46 @@ public class Model<MODELBEAN> {
 		}
 	}
 	
-	public final void unbind() {
-		for(Pair<Property<?>, Property<?>> p : bindedProperties){
-			Bindings.unbindBidirectional(p.getKey(), p.getValue());
+	private void bind(Property<String> p1, Property<Object> p2, StringConverter<Object> c) {
+		if(p1 == null || p2 == null) {
+			throw new RuntimeException("one or both properties to bind with converter is / are null. normally that means that you do not have initialized the Property");
+		}
+		
+		Bindings.bindBidirectional(p1, p2, c);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <C extends StringConverter<Object>> C converter(final BindToBeanProperty btb) {
+		final Class<? extends StringConverter<?>> converter = btb.converter();
+		StringConverter<?> con;
+		try {
+			con = converter.newInstance();
+			return (C) con;
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException("unable to instantiate " + converter.getName());
 		}
 	}
 	
-	private Property<?> jfxProperty(final String propertyName, final Object fromThis){
+	@SuppressWarnings("unchecked")
+	private <P extends Property<?>> P jfxProperty(final String propertyName, final Object fromThis){
 		try {
 			final Method propertyGetter = fromThis.getClass().getMethod(propertyName + "Property");
-			final Property<?> prop = (Property<?>) propertyGetter.invoke(fromThis);
+			final P prop = (P) propertyGetter.invoke(fromThis);
 			return prop;
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new RuntimeException(String.format("did not found a JavaFX-Property %s in object of type %s", propertyName, fromThis.getClass().getName()));
 		}
 	}
 	
+	private boolean supportsCombined(final Class<?> c){
+		final Class<?>[] interfaces = c.getInterfaces();
+		for(Class<?> i : interfaces){
+			if(i.equals(SupportCombined.class))
+				return true;
+		}
+		return false;
+	}
+
 	static Object objectFromField(final Field f, final Object source){
 		try {
 			final Object object = f.get(source);
@@ -152,14 +207,5 @@ public class Model<MODELBEAN> {
 		}
 		String firstLetter = firstUp.substring(0, 1).toUpperCase();
 		return firstLetter + firstUp.substring(1);
-	}
-	
-	private boolean supportsCombined(final Class<?> c){
-		final Class<?>[] interfaces = c.getInterfaces();
-		for(Class<?> i : interfaces){
-			if(i.equals(SupportCombined.class))
-				return true;
-		}
-		return false;
 	}
 }
