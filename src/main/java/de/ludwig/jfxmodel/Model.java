@@ -81,6 +81,7 @@ public class Model<MODELBEAN> {
 					interestedInModel.getModel().unbind();
 					interestedInModel.getModel().setModelObjectRaw(useThis);
 					interestedInModel.getModel().bind();
+					supportCombinedAware(interestedInModel);
 				} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 					throw new RuntimeException(e);
 				}
@@ -96,6 +97,14 @@ public class Model<MODELBEAN> {
 		}
 	}
 
+	private void supportCombinedAware(Object o) {
+		if(o instanceof SupportCombinedAware == false)
+			return;
+		
+		final SupportCombinedAware sca = (SupportCombinedAware) o;
+		sca.afterCombinedBinding();
+	}
+	
 	/**
 	 * Decides to bind with a converter or not.
 	 * @param beanBinding
@@ -105,6 +114,7 @@ public class Model<MODELBEAN> {
 		final Class<? extends StringConverter<?>> converter = beanBinding.converter();
 		final boolean dummyConverter = converter.isAssignableFrom(DummyConverter.class);
 		final String bindPropertyName = beanBinding.bindPropertyName();
+		
 		final Object objectFromField = objectFromField(jfxComponentField, owner);
 		if(objectFromField == null) {
 			throw new RuntimeException("property to bind is null, forgot to initiate field " + jfxComponentField.getName() + "?");
@@ -171,7 +181,7 @@ public class Model<MODELBEAN> {
 	private boolean supportsCombined(final Class<?> c){
 		final Class<?>[] interfaces = c.getInterfaces();
 		for(Class<?> i : interfaces){
-			if(i.equals(SupportCombined.class))
+			if(i.equals(SupportCombined.class) || i.equals(SupportCombinedAware.class))
 				return true;
 		}
 		return false;
