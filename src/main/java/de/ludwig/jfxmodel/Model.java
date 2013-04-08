@@ -114,7 +114,6 @@ public class Model<MODELBEAN> {
 		final Class<? extends StringConverter<?>> converter = beanBinding.converter();
 		final boolean dummyConverter = converter.isAssignableFrom(DummyConverter.class);
 		final String bindPropertyName = beanBinding.bindPropertyName();
-		
 		final Object objectFromField = objectFromField(jfxComponentField, owner);
 		if(objectFromField == null) {
 			throw new RuntimeException("property to bind is null, forgot to initiate field " + jfxComponentField.getName() + "?");
@@ -169,6 +168,14 @@ public class Model<MODELBEAN> {
 	
 	@SuppressWarnings("unchecked")
 	private <P extends Property<?>> P jfxProperty(final String propertyName, final Object fromThis){
+		// GIT-4 if no name is given we return fromThis. Throws runtime-Exception if fromThis is not of type Property
+		if(propertyName == null || propertyName.equals("")) {
+			if(fromThis instanceof Property == false) {
+				throw new RuntimeException("wanted to return field as jfxProperty but is not of type Property: " + fromThis.getClass().getName());
+			}
+			return (P) fromThis;
+		}
+		
 		try {
 			final Method propertyGetter = fromThis.getClass().getMethod(propertyName + "Property");
 			final P prop = (P) propertyGetter.invoke(fromThis);
