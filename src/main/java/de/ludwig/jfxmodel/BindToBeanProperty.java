@@ -26,7 +26,11 @@ public @interface BindToBeanProperty {
 	 */
 	public String bindPropertyName() default "";
 
-	public String bindSuperclassProperty() default "";
+	/**
+	 * Only required if {@link BindToBeanProperty} is used in conjunction with {@link BindInheritedToBeanProperty}
+	 * @return the name of a Property that is inherited but should be bind to a property of a Backing-Bean.
+	 */
+	public String bindInheritedProperty() default "";
 	
 	/**
 	 * 

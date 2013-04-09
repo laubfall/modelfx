@@ -49,6 +49,7 @@ public class TopBox implements Initializable {
 		MidBean midBean = new MidBean();
 		midBean.setMidText("MidBox: hello world to mid box");
 		midBean.setaNumber(1977);
+		midBean.setMinHeight(300d);
 		BottomBean bottomBean = new BottomBean();
 		bottomBean.setMessage("BottomBox: bottom message");
 		bottomBean.getBottomMessages().add("top1");

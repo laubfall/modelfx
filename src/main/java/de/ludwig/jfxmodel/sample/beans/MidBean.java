@@ -11,7 +11,7 @@ public class MidBean {
 
 	private SimpleIntegerProperty aNumber = new SimpleIntegerProperty(4711);
 	
-	private SimpleDoubleProperty width = new SimpleDoubleProperty();
+	private SimpleDoubleProperty minHeight = new SimpleDoubleProperty();
 	
 	/**
 	 * @return the midText
@@ -66,18 +66,18 @@ public class MidBean {
 	/**
 	 * @return the width
 	 */
-	public Double getWidth() {
-		return width.getValue();
+	public Double getMinHeight() {
+		return minHeight.getValue();
 	}
 
 	/**
 	 * @param width the width to set
 	 */
-	public void setWidth(Double width) {
-		this.width.set(width);
+	public void setMinHeight(Double minHeight) {
+		this.minHeight.set(minHeight);
 	}
 	
-	public SimpleDoubleProperty widthProperty() {
-		return width;
+	public SimpleDoubleProperty minHeightProperty() {
+		return minHeight;
 	}
 }

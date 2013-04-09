@@ -16,12 +16,12 @@ import de.ludwig.jfxmodel.Model;
 import de.ludwig.jfxmodel.SupportCombined;
 import de.ludwig.jfxmodel.sample.beans.MidBean;
 
-@BindInheritedToBeanProperty(bindings = { @BindToBeanProperty(bindSuperclassProperty = "width") })
+@BindInheritedToBeanProperty(bindings = { @BindToBeanProperty(bindInheritedProperty = "minHeight") })
 public class MidBox extends VBox implements Initializable, SupportCombined {
 	@BindToBeanProperty(bindPropertyName = "text")
 	@FXML
 	private Text midText;
-
+	
 	@BindToBeanProperty(bindPropertyName = "text", converter = IntegerStringConverter.class)
 	@FXML
 	private Text aNumber;
