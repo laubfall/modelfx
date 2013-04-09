@@ -1,5 +1,6 @@
 package de.ludwig.jfxmodel.sample.beans;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -9,6 +10,8 @@ public class MidBean {
 	private SimpleStringProperty midText = new SimpleStringProperty();
 
 	private SimpleIntegerProperty aNumber = new SimpleIntegerProperty(4711);
+	
+	private SimpleDoubleProperty width = new SimpleDoubleProperty();
 	
 	/**
 	 * @return the midText
@@ -58,5 +61,23 @@ public class MidBean {
 	
 	public SimpleIntegerProperty aNumberProperty() {
 		return aNumber;
+	}
+
+	/**
+	 * @return the width
+	 */
+	public Double getWidth() {
+		return width.getValue();
+	}
+
+	/**
+	 * @param width the width to set
+	 */
+	public void setWidth(Double width) {
+		this.width.set(width);
+	}
+	
+	public SimpleDoubleProperty widthProperty() {
+		return width;
 	}
 }

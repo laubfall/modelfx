@@ -15,7 +15,7 @@ import javafx.util.StringConverter;
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
+@Target({ ElementType.FIELD})
 public @interface BindToBeanProperty {
 	/**
 	 * if the annotated field cannot be binded directly to a Backing-Bean
@@ -26,6 +26,8 @@ public @interface BindToBeanProperty {
 	 */
 	public String bindPropertyName() default "";
 
+	public String bindSuperclassProperty() default "";
+	
 	/**
 	 * 
 	 * @return Optional. If set with a class other then {@link DummyConverter}

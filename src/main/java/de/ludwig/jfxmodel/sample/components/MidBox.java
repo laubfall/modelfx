@@ -10,28 +10,32 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.converter.IntegerStringConverter;
+import de.ludwig.jfxmodel.BindInheritedToBeanProperty;
 import de.ludwig.jfxmodel.BindToBeanProperty;
 import de.ludwig.jfxmodel.Model;
 import de.ludwig.jfxmodel.SupportCombined;
 import de.ludwig.jfxmodel.sample.beans.MidBean;
 
-public class MidBox extends VBox implements Initializable, SupportCombined{
-	@BindToBeanProperty(bindPropertyName="text")
+@BindInheritedToBeanProperty(bindings = { @BindToBeanProperty(bindSuperclassProperty = "width") })
+public class MidBox extends VBox implements Initializable, SupportCombined {
+	@BindToBeanProperty(bindPropertyName = "text")
 	@FXML
 	private Text midText;
 
-	@BindToBeanProperty(bindPropertyName="text", converter=IntegerStringConverter.class)
+	@BindToBeanProperty(bindPropertyName = "text", converter = IntegerStringConverter.class)
 	@FXML
 	private Text aNumber;
-	
+
 	@BindToBeanProperty
 	@FXML
 	private BottomBox bottom;
-	
+
 	private Model<MidBean> model = new Model<>(this, new MidBean());
-	
-	public MidBox(){
-		FXMLLoader loader = new FXMLLoader(MidBox.class.getResource("/de/ludwig/jfxmodel/sample/components/MidBox.fxml"));
+
+	public MidBox() {
+		FXMLLoader loader = new FXMLLoader(
+				MidBox.class
+						.getResource("/de/ludwig/jfxmodel/sample/components/MidBox.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		try {
@@ -40,7 +44,7 @@ public class MidBox extends VBox implements Initializable, SupportCombined{
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		model.bind();
